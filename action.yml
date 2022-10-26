@@ -1,0 +1,7 @@
+# action.yml
+name: 'Terraform Dependagen'
+description: 'Generate Dependabot configuration for Terraform'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args: -v ${{ github.workspace }}:/terraform-code
