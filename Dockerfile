@@ -8,4 +8,4 @@ RUN mkdir /terraform-code
 COPY dependagen.py /dependagen.py
 
 # Run it
-ENTRYPOINT ["python3", "/dependagen.py", "--scan_dir=/terraform-code", "--out_file=/terraform-code/.github/dependabot.yml"]
+ENTRYPOINT ["python3", "/dependagen.py"]

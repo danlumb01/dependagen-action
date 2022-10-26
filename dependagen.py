@@ -2,9 +2,9 @@
 import os , argparse
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--dependency_file", nargs='?', const="versions.tf", default="versions.tf")
-parser.add_argument("--scan_dir",type=str, required=True)
-parser.add_argument("--out_file", type=str, required=True)
+parser.add_argument("--dependency_file", type=str, nargs='?', const="versions.tf", default="versions.tf")
+parser.add_argument("--scan_dir", type=str, nargs='?', default=os.getcwd())
+
 args=parser.parse_args()
 
 # to store matches
@@ -37,13 +37,15 @@ config_package_fragment = """
 
 # setup the config file
 
-os.makedirs(os.path.dirname(args.out_file), exist_ok=True) # create the dirpath we got in out_file if needed
+output_file = args.scan_dir + "/.github/dependabot.yml"
 
-with open(args.out_file, "w") as config_file:
+os.makedirs(os.path.dirname(output_file), exist_ok=True) # create the dirpath we got in out_file if needed
+
+with open(output_file, "w") as config_file:
     config_file.write(config_header)
 
 # now append the fragments
-with open(args.out_file, "a") as config_file:
+with open(output_file, "a") as config_file:
     for dir in dirs_found:
         config_file.write(config_package_fragment.format(directory=dir))
 
