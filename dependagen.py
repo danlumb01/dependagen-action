@@ -10,12 +10,8 @@ args=parser.parse_args()
 # to store matches
 dirs_found = []
 
-# use os walk to traverse recursively, grab any file called versions.tf and get the root it lives in
-for root, dirs, files in os.walk(args.scan_dir):
-    for file in files:
-        if args.dependency_file in file:
-            dirs_found.append(os.path.relpath(root, start=args.scan_dir)) # find relative path from our passed in scan_dir
-
+# location to write config file
+output_file = args.scan_dir + "/.github/dependabot.yml"
 
 # dependabot config fragments
 config_header = """
@@ -24,7 +20,7 @@ updates:
 """
 
 config_package_fragment = """
-- package-ecosystem: "terraform"
+  - package-ecosystem: "terraform"
     directory: {directory}
     schedule:
       interval: "weekly"
@@ -35,10 +31,15 @@ config_package_fragment = """
         update-types: ["version-update:semver-major"] # let's have more control over major changes
 """
 
+
+
+# use os walk to traverse recursively, grab any file called versions.tf and get the root it lives in
+for root, dirs, files in os.walk(args.scan_dir):
+    for file in files:
+        if args.dependency_file in file:
+            dirs_found.append(os.path.relpath(root, start=args.scan_dir)) # find relative paths using our scan dir as the starting point
+
 # setup the config file
-
-output_file = args.scan_dir + "/.github/dependabot.yml"
-
 os.makedirs(os.path.dirname(output_file), exist_ok=True) # create the dirpath we got in out_file if needed
 
 with open(output_file, "w") as config_file:
