@@ -2,7 +2,7 @@
 Github action to generate terraform dependabot config for complex directory structures. 
 
 **Warning**
-This action will overwrite an existing dependabot config file if present.
+This action will overwrite an existing dependabot config file if run without `output-file` parameter.
 
 
 ## Usage
@@ -30,3 +30,20 @@ jobs:
           git commit -am "Dependabot config generated"
           git push
 ```
+
+
+Run it manually with Python and pass the args:
+
+```
+usage: dependagen.py [-h] [--dependency_file [DEPENDENCY_FILE]] [--scan_dir [SCAN_DIR]] [--output_file [OUTPUT_FILE]] [--interval [INTERVAL]] [--day [DAY]]
+
+options:
+  -h, --help            show this help message and exit
+  --dependency_file [DEPENDENCY_FILE]
+  --scan_dir [SCAN_DIR]
+  --output_file [OUTPUT_FILE]
+  --interval [INTERVAL]
+  --day [DAY]
+```
+
+For example: `python3 -m dependagen --output_file mynewdeps.yml --interval weekly --day monday`
